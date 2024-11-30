@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 
 class MyInfoScreen extends StatelessWidget {
+
+  const MyInfoScreen({super.key}); 
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Center(child: Text("Calculadora Imc")),
+        backgroundColor: Colors.blue
+      ),
+    );
   }
+
+
+
 
 }

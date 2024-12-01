@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:wilson_diego_barbosa_p2/screen/welcome_screen.dart';
 
 class LoginScreen extends StatefulWidget {
     
@@ -14,15 +15,15 @@ class LoginScreen extends StatefulWidget {
 // Classe que controla o estado do form
 class LoginState extends State<LoginScreen> {
 
-  final TextEditingController username = TextEditingController();
+  final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
 
   // Mensagens de errro que podem ser mostradas
   String? passwordErrorMessage;
-  String? nameErrorMessage;
+  String? emailErrorMessage;
 
   // Atributos que controlam a validade ou invaliadade do formulário
-  bool isNameValid = false;
+  bool isEmailValid = false;
   bool isPassValid = false;
 
   // Cria a o formulário de login
@@ -30,50 +31,35 @@ class LoginState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Center(child: Text("Prova 01 - Flutter")),
+          title: const Center(child: Text("Tela de Login")),
           backgroundColor: Colors.blue
           ),
-      body: Padding(
-        padding: EdgeInsets.all(50.0),
+      body: 
+        Container(
+        margin: EdgeInsets.all(32),
+        padding: EdgeInsets.all(32),
         child: Column(
-          children: [
-            Text("Faça seu login aqui", textAlign: TextAlign.left, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-            Text("Nome de usuário"),
-            TextField(
-              controller: username,
-              decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  hintText: "I hate flutter",
-                  errorText: nameErrorMessage),
-            ),
-            SizedBox(height: 40),
-            Text("Senha do usuário", textAlign: TextAlign.left),
-            TextField(
-              controller: password,
-              decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  errorText: passwordErrorMessage),
-              // decoration: ,
-            ),
-            SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: validateLogin, child: Text("Confirmar", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                ),
-                ElevatedButton(
-                  onPressed: clearForm,
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 201, 201, 201)),),
-                    child: Text("Cancelar", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-          ],
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Seja bem-vindo(a)", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          SizedBox(height: 24),
+          Text("Email", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          SizedBox(height: 8), 
+          TextField(controller: email, decoration: InputDecoration(border: OutlineInputBorder())),
+          SizedBox(height: 24), 
+          Text("Senha", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          SizedBox(height: 8), 
+          TextField(controller: password, decoration: InputDecoration( border: OutlineInputBorder())),
+          SizedBox(height: 24),
+          Row(
+            children: [
+              ElevatedButton(onPressed: validateLogin, child: Text("Logar")),
+              ElevatedButton(onPressed: clearForm, child: Text("Cancelar")),
+            ],
+          ),
+        ],
         ),
-      ),
+      )
     );
   }
 
@@ -81,16 +67,16 @@ class LoginState extends State<LoginScreen> {
   void validateLogin() {
     
     // Validação do nome
-    if (username.text.isEmpty) {
+    if (email.text.isEmpty) {
       setState(() {
-        nameErrorMessage = "Nome não pode ser vazio";
+        emailErrorMessage = "email não pode ser vazio";
       });
-    } else if (username.text.length < 3 || username.text.length > 15) {
+    } else if (email.text.length < 3 || email.text.length > 15) {
       setState(() {
-        nameErrorMessage = "Nome deve conter entre 3 e 15 caracteres";
+        emailErrorMessage = "email deve conter entre 3 e 15 caracteres";
       });
     } else {
-      isNameValid = true;
+      isEmailValid = true;
     }
 
     // Validação da senha
@@ -107,26 +93,26 @@ class LoginState extends State<LoginScreen> {
     }
 
     // Finalmente, se todos forem válidos mudar de pagina
-    if (isNameValid && isPassValid) {
+    if (isEmailValid && isPassValid) {
       changePage();
     }
   }
 
   // Método que muda de tela, só será chamado em caso de login bem sucedido
   void changePage() {
-    // Navigator.push( context, MaterialPageRoute(builder: (context) => const CustomPage()));
+    Navigator.push( context, MaterialPageRoute(builder: (context) => const WelcomeScreen()));
   }
 
   // Reseta o estado do formulário
   void clearForm() {
     setState(() {
-      username.clear();
+      email.clear();
       password.clear();
 
-      isNameValid = false;
+      isEmailValid = false;
       isPassValid = false;
 
-      nameErrorMessage = null;
+      emailErrorMessage = null;
       passwordErrorMessage = null;
     });
   }

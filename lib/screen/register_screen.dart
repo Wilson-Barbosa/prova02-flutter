@@ -41,6 +41,9 @@ class LoginState extends State<RegisterScreen> {
         Container(
         margin: EdgeInsets.all(32),
         padding: EdgeInsets.all(32),
+        decoration: BoxDecoration(
+          
+        ),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

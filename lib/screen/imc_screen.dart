@@ -30,9 +30,9 @@ class ImcState extends State<ImcScreen> {
         margin: EdgeInsets.all(32),
         padding: EdgeInsets.all(32),
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 241, 241, 241), // Change container background color
-          border: Border.all(color: const Color.fromARGB(255, 110, 110, 110), width: 2), // Adds a border
-          borderRadius: BorderRadius.circular(8), // Optional: Rounds the corners
+          color: const Color.fromARGB(255, 241, 241, 241),
+          border: Border.all(color: const Color.fromARGB(255, 110, 110, 110), width: 2),
+          borderRadius: BorderRadius.circular(8), 
         ),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +59,7 @@ class ImcState extends State<ImcScreen> {
   }
 
 
-  calculateImcAndReturnMessage() {
+  void calculateImcAndReturnMessage() {
     setState(() {
       ImcCalculator imcCalculator = ImcCalculator(weight: double.parse(weight.text), height: double.parse(height.text));
 

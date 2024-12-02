@@ -12,27 +12,38 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text("Tela de opções")),
+        title: Text("Tela de opções", style: TextStyle(color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 2, 139, 9)
       ),
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Image.asset("assets/images/cat-01.png", fit: BoxFit.fill),
-          Column(
-            children: [
-              SizedBox(height: 36),
-              Text("Escolha uma das opções a baixo", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-              SizedBox(height: 36),
-              Text("Clique aqui para acessar a calculadora:"),
-              SizedBox(height: 16),
-              ElevatedButton(onPressed: () => changeToImc(context), child: Text("Calculadora IMC")),
-              SizedBox(height: 36),
-              Text("Clique no botão abaixo para acessar a calculadora"),
-              SizedBox(height: 16),
-              ElevatedButton(onPressed: () => changeToInfo(context), child: Text("Meus dados")),
-            ],
-          )  
+          Image.asset("assets/images/cat-01.png", fit: BoxFit.fill),
+
+          Container(
+            margin: EdgeInsets.all(64),
+            padding: EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 241, 241, 241), 
+              border: Border.all(color: const Color.fromARGB(255, 243, 243, 243), width: 2),
+              borderRadius: BorderRadius.circular(8),
+            ),
+
+            child: Column(
+              children: [
+                SizedBox(height: 36),
+                Text("Seja bem-vindo", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                SizedBox(height: 36),
+                Text("Acesse a calculadorade IMC"),
+                SizedBox(height: 16),
+                ElevatedButton(onPressed: () => changeToImc(context), child: Text("Calculadora IMC")),
+                SizedBox(height: 36),
+                Text("Veja os meus dados: "),
+                SizedBox(height: 16),
+                ElevatedButton(onPressed: () => changeToInfo(context), child: Text("Meus dados")),
+              ],
+            ) ,
+          )
         ],
       ),
     );

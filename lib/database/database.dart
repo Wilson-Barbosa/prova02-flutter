@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:wilson_diego_barbosa_p2/model/user_model.dart';
 
 class DatabaseHelper {
   // Singleton pattern
@@ -39,41 +40,57 @@ class DatabaseHelper {
     );
   }
 
-  // Insert a new user
-  Future<int> insertNewUser(Map<String, dynamic> user) async {
-    final db = await database;
-    return await db.insert('users', user, conflictAlgorithm: ConflictAlgorithm.replace);
+
+  Future<int> insertNewUser(UserModel user) async {
+    final db = await DatabaseHelper.instance.database;
+    return await db.insert(
+      'users', // Table name
+      {
+        'name': user.name,
+        'email': user.email,
+        'password': user.password,
+      }, 
+      conflictAlgorithm: ConflictAlgorithm.replace, // Avoid duplicates
+    ); 
   }
 
 
-  Future<List<Map<String, dynamic>>> getAllUsersFromDatabase() async {
+  Future<List<UserModel>> getAllUsersFromDatabase() async {
     final db = await database;
-    return await db.query('users');
+    final List<Map<String, dynamic>> userMaps = await db.query('users');
+
+    return userMaps.map((userMap) {
+      return UserModel(
+        name: userMap['name'],
+        email: userMap['email'],
+        password: userMap['password'],
+      );
+    }).toList();
   }
 
 
-  Future<int> updateUserById(int id, Map<String, dynamic> user) async {
-    final db = await database;
-    return await db.update(
-      'users',
-      user,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
 
-  Future<int> deleteUserById(int id) async {
-    final db = await database;
-    return await db.delete(
-      'users',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
+  // Future<int> updateUserById(int id, Map<String, dynamic> user) async {
+  //   final db = await database;
+  //   return await db.update(
+  //     'users',
+  //     user,
+  //     where: 'id = ?',
+  //     whereArgs: [id],
+  //   );
+  // }
 
-  // Delete all users
-  Future<int> deleteAllUsersFromDatabase() async {
-    final db = await database;
-    return await db.delete('users');
-  }
+  // Future<int> deleteUserById(int id) async {
+  //   final db = await database;
+  //   return await db.delete(
+  //     'users',
+  //     where: 'id = ?',
+  //     whereArgs: [id],
+  //   );
+  // }
+
+  // Future<int> deleteAllUsersFromDatabase() async {
+  //   final db = await database;
+  //   return await db.delete('users');
+  // }
 }

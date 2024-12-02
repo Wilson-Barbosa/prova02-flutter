@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:wilson_diego_barbosa_p2/database/database.dart';
+import 'package:wilson_diego_barbosa_p2/model/user_model.dart';
+import 'package:wilson_diego_barbosa_p2/screen/register_screen.dart';
 import 'package:wilson_diego_barbosa_p2/screen/welcome_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -31,13 +34,18 @@ class LoginState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Center(child: Text("Tela de Login")),
-          backgroundColor: Colors.blue
+          title: Text("Tela de Login", style: TextStyle(color: Colors.white)),
+          backgroundColor: Color.fromARGB(255, 32, 50, 216)
           ),
       body: 
         Container(
         margin: EdgeInsets.all(32),
         padding: EdgeInsets.all(32),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 241, 241, 241), 
+          border: Border.all(color: const Color.fromARGB(255, 110, 110, 110), width: 2), 
+          borderRadius: BorderRadius.circular(8),
+        ),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -49,14 +57,28 @@ class LoginState extends State<LoginScreen> {
           SizedBox(height: 24), 
           Text("Senha", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           SizedBox(height: 8), 
-          TextField(controller: password, decoration: InputDecoration( border: OutlineInputBorder())),
+          TextField(controller: password, obscureText: true, decoration: InputDecoration( border: OutlineInputBorder())),
           SizedBox(height: 24),
           Row(
             children: [
               ElevatedButton(onPressed: validateLogin, child: Text("Logar")),
+              SizedBox(width: 4),
               ElevatedButton(onPressed: clearForm, child: Text("Cancelar")),
+              SizedBox(width: 4),
+              ElevatedButton(onPressed: printAllUsersOnTerminal, child: Text("Printar usuários")),
             ],
           ),
+
+          SizedBox(height: 8),
+          Divider(color: const Color.fromARGB(255, 10, 10, 10), thickness: 1, indent: 16, endIndent: 16),
+          SizedBox(height: 8),
+          
+          Align(
+            alignment: Alignment.center,
+            child: GestureDetector(
+            onTap: changeToRegister,
+            child: Text("Registre-se aqui", style: TextStyle(fontSize: 12, decoration: TextDecoration.underline)))
+          )
         ],
         ),
       )
@@ -94,13 +116,17 @@ class LoginState extends State<LoginScreen> {
 
     // Finalmente, se todos forem válidos mudar de pagina
     if (isEmailValid && isPassValid) {
-      changePage();
+      changeToWelcome();
     }
   }
 
   // Método que muda de tela, só será chamado em caso de login bem sucedido
-  void changePage() {
+  void changeToWelcome() {
     Navigator.push( context, MaterialPageRoute(builder: (context) => const WelcomeScreen()));
+  }
+
+  void changeToRegister(){
+    Navigator.push( context, MaterialPageRoute(builder: (context) => const RegisterScreen()));
   }
 
   // Reseta o estado do formulário
@@ -116,4 +142,13 @@ class LoginState extends State<LoginScreen> {
       passwordErrorMessage = null;
     });
   }
+
+
+  void printAllUsersOnTerminal() async {
+    List<UserModel> users = await DatabaseHelper.instance.getAllUsersFromDatabase();
+    for (var user in users) {
+      print('Name: ${user.name}, Email: ${user.email}, Password: ${user.password}');
+    }
+  }
+
 }

@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:wilson_diego_barbosa_p2/database/database.dart';
+import 'package:wilson_diego_barbosa_p2/model/user_model.dart';
 import 'package:wilson_diego_barbosa_p2/screen/login_screen.dart';
 import 'package:wilson_diego_barbosa_p2/screen/welcome_screen.dart';
 
@@ -22,27 +24,29 @@ class LoginState extends State<RegisterScreen> {
 
   // Mensagens de errro que podem ser mostradas
   String? passwordErrorMessage;
-  String? nameErrorMessage;
+  String? usernameErrorMessage;
+  String? emailErrorMessage;
 
   // Atributos que controlam a validade ou invaliadade do formulário
-  bool isNameValid = false;
+  bool isUsernameValid = false;
   bool isPassValid = false;
   bool isEmailValid = false;
 
-  // Cria a o formulário de login
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Center(child: Text("Cadastro")),
-          backgroundColor: Colors.blue
+          title: Text("Tela de Cadastro", style: TextStyle(color: Colors.white)),
+          backgroundColor: Color.fromARGB(255, 32, 50, 216)
           ),
-      body: 
-        Container(
+      body: SingleChildScrollView(
+        child: Container(
         margin: EdgeInsets.all(32),
         padding: EdgeInsets.all(32),
         decoration: BoxDecoration(
-          
+          color: const Color.fromARGB(255, 241, 241, 241), 
+          border: Border.all(color: const Color.fromARGB(255, 110, 110, 110), width: 2),
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,17 +57,20 @@ class LoginState extends State<RegisterScreen> {
           
           Text("Nome", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           SizedBox(height: 8), 
-          TextField(controller: username, decoration: InputDecoration(border: OutlineInputBorder())),
+          TextField(controller: username, decoration: InputDecoration(border: OutlineInputBorder(), errorText: usernameErrorMessage)),
           SizedBox(height: 24),
 
           Text("Email", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           SizedBox(height: 8), 
-          TextField(controller: email, decoration: InputDecoration(border: OutlineInputBorder())),
+          TextField(controller: email, decoration: InputDecoration(border: OutlineInputBorder(), errorText: emailErrorMessage)),
           SizedBox(height: 24),
 
           Text("Senha", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           SizedBox(height: 8), 
-          TextField(controller: password, decoration: InputDecoration( border: OutlineInputBorder())),
+          TextField(
+            controller: password,
+            obscureText: true,
+            decoration: InputDecoration(border: OutlineInputBorder(), errorText: passwordErrorMessage)),
           SizedBox(height: 24),
 
           Row(
@@ -77,33 +84,35 @@ class LoginState extends State<RegisterScreen> {
           SizedBox(height: 8),
           Divider(color: const Color.fromARGB(255, 10, 10, 10), thickness: 1, indent: 16, endIndent: 16),
           SizedBox(height: 8),
-          GestureDetector(
+
+          Align(
+            alignment: Alignment.center,
+            child: GestureDetector(
             onTap: changeToLogin,
-            child: Text("Faça o login aqui", style: TextStyle(fontSize: 12, decoration: TextDecoration.underline))
+            child: Text("Faça o login aqui", style: TextStyle(fontSize: 12, decoration: TextDecoration.underline)))
           )
         ],
         ),
       )
-    );
+    ));
   }
 
-  // Método que valida o login e o transfere para outra página
   void validateLogin() {
-    
-    // Validação do nome
+
     if (username.text.isEmpty) {
       setState(() {
-        nameErrorMessage = "Nome não pode ser vazio";
-      });
-    } else if (username.text.length < 3 || username.text.length > 15) {
-      setState(() {
-        nameErrorMessage = "Nome deve conter entre 3 e 15 caracteres";
+        usernameErrorMessage = "Nome não pode ser vazio";
       });
     } else {
-      isNameValid = true;
+      isUsernameValid = true;
     }
 
-    // Validação da senha
+    if(email.text.isEmpty) {
+      setState(() {
+        emailErrorMessage = "Email não pode ser vazio";
+      });
+    }
+
     if (password.text.isEmpty) {
       setState(() {
         passwordErrorMessage = "Senha não pode ser vazia";
@@ -116,8 +125,8 @@ class LoginState extends State<RegisterScreen> {
       isPassValid = true;
     }
 
-    // Finalmente, se todos forem válidos mudar de pagina
-    if (isNameValid && isPassValid) {
+    if (isUsernameValid && isPassValid) {
+      saveUserInDatabase();
       changeToWelcome();
     }
   }
@@ -138,11 +147,24 @@ class LoginState extends State<RegisterScreen> {
       email.clear();
       password.clear();
 
-      isNameValid = false;
+      isUsernameValid = false;
       isPassValid = false;
+      isEmailValid = false;
 
-      nameErrorMessage = null;
+      usernameErrorMessage = null;
       passwordErrorMessage = null;
+      emailErrorMessage = null;
     });
   }
+
+  void saveUserInDatabase() async{
+    UserModel newUser = UserModel(
+      name: username.text, 
+      email: email.text, 
+      password: password.text
+    );
+
+    await DatabaseHelper.instance.insertNewUser(newUser);
+  }
+  
 }

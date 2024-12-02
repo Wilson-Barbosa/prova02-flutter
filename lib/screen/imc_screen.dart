@@ -22,7 +22,7 @@ class ImcState extends State<ImcScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text("Calculadora Imc")),
+        title: Text("Tela da Calculadora IMC", style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue
       ),
       body:
@@ -66,6 +66,10 @@ class ImcState extends State<ImcScreen> {
       imc = imcCalculator.calculateImc();
       message = imcCalculator.returnMessage();
     });
+
+  }
+
+  void getNameFromDatabase(){
 
   }
   

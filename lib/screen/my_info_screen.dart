@@ -10,7 +10,7 @@ class MyInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text("Minhas informações")),
+        title: Text("Minha informações", style: TextStyle(color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 2, 139, 9)
       ),
       body: Stack(

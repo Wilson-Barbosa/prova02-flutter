@@ -68,9 +68,5 @@ class ImcState extends State<ImcScreen> {
     });
 
   }
-
-  void getNameFromDatabase(){
-
-  }
   
 }

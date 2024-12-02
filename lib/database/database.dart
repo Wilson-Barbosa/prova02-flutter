@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 import 'package:wilson_diego_barbosa_p2/model/user_model.dart';
 
 class DatabaseHelper {
-  // Singleton pattern
+
   static final DatabaseHelper instance = DatabaseHelper.internal();
   Database? _database;
 
@@ -13,14 +13,12 @@ class DatabaseHelper {
 
   DatabaseHelper.internal();
 
-  // Getter for the database
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await initDatabase();
     return _database!;
   }
 
-  // Initialize the database
   Future<Database> initDatabase() async {
     return openDatabase(
       join(await getDatabasesPath(), 'user_database.db'),
@@ -44,13 +42,13 @@ class DatabaseHelper {
   Future<int> insertNewUser(UserModel user) async {
     final db = await DatabaseHelper.instance.database;
     return await db.insert(
-      'users', // Table name
+      'users', 
       {
         'name': user.name,
         'email': user.email,
         'password': user.password,
       }, 
-      conflictAlgorithm: ConflictAlgorithm.replace, // Avoid duplicates
+      conflictAlgorithm: ConflictAlgorithm.replace, 
     ); 
   }
 

@@ -83,6 +83,13 @@ class LoginState extends State<LoginScreen> {
 
 
   Future<void> validateLogin() async {
+
+    setState(() {
+      emailErrorMessage = null;
+      passwordErrorMessage = null;
+      isEmailValid = false;
+      isPassValid = false;
+    });
   
     if (email.text.isEmpty) {
       setState(() {

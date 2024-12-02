@@ -98,6 +98,13 @@ class LoginState extends State<RegisterScreen> {
   }
 
   Future<void> validateInformation() async {
+
+    setState(() {
+      usernameErrorMessage = null;
+      emailErrorMessage = null;
+      passwordErrorMessage = null;
+    });
+
     if (username.text.isEmpty) {
       setState(() {
         usernameErrorMessage = "Nome não pode ser vazio";
@@ -106,10 +113,12 @@ class LoginState extends State<RegisterScreen> {
       isUsernameValid = true;
     }
 
-    if(email.text.isEmpty) {
+    if (email.text.isEmpty) {
       setState(() {
         emailErrorMessage = "Email não pode ser vazio";
       });
+    } else {
+      isEmailValid = true;
     }
 
     if (password.text.isEmpty) {
@@ -118,34 +127,27 @@ class LoginState extends State<RegisterScreen> {
       });
     } else if (password.text.length < 3) {
       setState(() {
-        passwordErrorMessage = "Senha deve ter no minimo 3 caracteres";
+        passwordErrorMessage = "Senha deve ter no mínimo 3 caracteres";
       });
     } else {
       isPassValid = true;
     }
 
+
     if (isUsernameValid && isPassValid && isEmailValid) {
       UserModel? user = await DatabaseHelper.instance.getUserByEmail(email.text);
+
       if (user != null) {
         setState(() {
           emailErrorMessage = "Email já cadastrado";
         });
       } else {
-        if (user?.password != password.text || user?.email != email.text) {
-          setState(() {
-            emailErrorMessage = "Email ou senha incorretos";
-            passwordErrorMessage = "Email ou senha incorretos";
-          });
-        } else {
-          saveUserInDatabase();
-          changeToWelcome();
-        }
+        saveUserInDatabase();
+        changeToWelcome();
       }
     }
-
-
-
   }
+
 
 
   void changeToWelcome() {

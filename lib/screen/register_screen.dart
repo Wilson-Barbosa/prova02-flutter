@@ -147,7 +147,7 @@ class LoginState extends State<RegisterScreen> {
 
   }
 
-  // Método que muda de tela, só será chamado em caso de login bem sucedido
+
   void changeToWelcome() {
     Navigator.push( context, MaterialPageRoute(builder: (context) => const WelcomeScreen()));
   }
@@ -156,7 +156,7 @@ class LoginState extends State<RegisterScreen> {
     Navigator.push( context, MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
-  // Reseta o estado do formulário
+
   void clearForm() {
     setState(() {
       username.clear();

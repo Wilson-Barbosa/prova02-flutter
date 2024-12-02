@@ -7,15 +7,12 @@ import 'package:wilson_diego_barbosa_p2/screen/register_screen.dart';
 import 'package:wilson_diego_barbosa_p2/screen/welcome_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-    
-    // constructor que será chamado dentro do do atribbuto home da classe main.dart
-    const LoginScreen({super.key}); 
+  const LoginScreen({super.key}); 
 
   @override
   LoginState createState() => LoginState();
 }
 
-// Classe que controla o estado do form
 class LoginState extends State<LoginScreen> {
 
   final TextEditingController email = TextEditingController();
@@ -29,7 +26,6 @@ class LoginState extends State<LoginScreen> {
   bool isEmailValid = false;
   bool isPassValid = false;
 
-  // Cria a o formulário de login
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,8 +83,7 @@ class LoginState extends State<LoginScreen> {
 
 
   Future<void> validateLogin() async {
-    
-
+  
     if (email.text.isEmpty) {
       setState(() {
         emailErrorMessage = "email não pode ser vazio";
@@ -101,7 +96,6 @@ class LoginState extends State<LoginScreen> {
       isEmailValid = true;
     }
 
-    // Validação da senha
     if (password.text.isEmpty) {
       setState(() {
         passwordErrorMessage = "Senha não pode ser vazia";
@@ -136,7 +130,7 @@ class LoginState extends State<LoginScreen> {
 
   }
 
-  // Método que muda de tela, só será chamado em caso de login bem sucedido
+
   void changeToWelcome() {
     Navigator.push( context, MaterialPageRoute(builder: (context) => const WelcomeScreen()));
   }
@@ -145,7 +139,7 @@ class LoginState extends State<LoginScreen> {
     Navigator.push( context, MaterialPageRoute(builder: (context) => const RegisterScreen()));
   }
 
-  // Reseta o estado do formulário
+
   void clearForm() {
     setState(() {
       email.clear();

@@ -75,7 +75,7 @@ class LoginState extends State<RegisterScreen> {
 
           Row(
             children: [
-              ElevatedButton(onPressed: validateLogin, child: Text("Cadastrar")),
+              ElevatedButton(onPressed: validateInformation, child: Text("Cadastrar")),
               SizedBox(width: 16),
               ElevatedButton(onPressed: clearForm, child: Text("Limpar campos")),
             ],
@@ -97,8 +97,7 @@ class LoginState extends State<RegisterScreen> {
     ));
   }
 
-  void validateLogin() {
-
+  Future<void> validateInformation() async {
     if (username.text.isEmpty) {
       setState(() {
         usernameErrorMessage = "Nome não pode ser vazio";
@@ -125,10 +124,27 @@ class LoginState extends State<RegisterScreen> {
       isPassValid = true;
     }
 
-    if (isUsernameValid && isPassValid) {
-      saveUserInDatabase();
-      changeToWelcome();
+    if (isUsernameValid && isPassValid && isEmailValid) {
+      UserModel? user = await DatabaseHelper.instance.getUserByEmail(email.text);
+      if (user != null) {
+        setState(() {
+          emailErrorMessage = "Email já cadastrado";
+        });
+      } else {
+        if (user?.password != password.text || user?.email != email.text) {
+          setState(() {
+            emailErrorMessage = "Email ou senha incorretos";
+            passwordErrorMessage = "Email ou senha incorretos";
+          });
+        } else {
+          saveUserInDatabase();
+          changeToWelcome();
+        }
+      }
     }
+
+
+
   }
 
   // Método que muda de tela, só será chamado em caso de login bem sucedido
@@ -156,6 +172,8 @@ class LoginState extends State<RegisterScreen> {
       emailErrorMessage = null;
     });
   }
+
+
 
   void saveUserInDatabase() async{
     UserModel newUser = UserModel(

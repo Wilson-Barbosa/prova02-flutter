@@ -85,10 +85,10 @@ class LoginState extends State<LoginScreen> {
     );
   }
 
-  // Método que valida o login e o transfere para outra página
-  void validateLogin() {
+
+  Future<void> validateLogin() async {
     
-    // Validação do nome
+
     if (email.text.isEmpty) {
       setState(() {
         emailErrorMessage = "email não pode ser vazio";
@@ -114,10 +114,26 @@ class LoginState extends State<LoginScreen> {
       isPassValid = true;
     }
 
-    // Finalmente, se todos forem válidos mudar de pagina
     if (isEmailValid && isPassValid) {
-      changeToWelcome();
+      UserModel? user = await DatabaseHelper.instance.getUserByEmail(email.text);
+
+      if (user != null) {
+        if (user.password != password.text || user.email != email.text) {
+          setState(() {
+            emailErrorMessage = "Email ou senha incorretos";
+            passwordErrorMessage = "Email ou senha incorretos";
+          });
+        } else {
+          changeToWelcome();
+        }
+      } else {
+        setState(() {
+          emailErrorMessage = "Email não cadastrado";
+        });
+      }
     }
+
+
   }
 
   // Método que muda de tela, só será chamado em caso de login bem sucedido

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wilson_diego_barbosa_p2/screen/register_screen.dart';
-import 'package:wilson_diego_barbosa_p2/screen/welcome_screen.dart';
 
 
 void main() {

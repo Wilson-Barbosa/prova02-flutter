@@ -68,29 +68,25 @@ class DatabaseHelper {
     }).toList();
   }
 
+  Future<UserModel?> getUserByEmail(String email) async {
+  final db = await database;
+  final List<Map<String, dynamic>> result = await db.query(
+    'users', 
+    where: 'email = ?', 
+    whereArgs: [email],
+    limit: 1, 
+  );
 
+  if (result.isNotEmpty) {
+    
+    return UserModel(
+      name: result.first['name'],
+      email: result.first['email'],
+      password: result.first['password'],
+    );
+  } else {
+    return null;
+  }
+}
 
-  // Future<int> updateUserById(int id, Map<String, dynamic> user) async {
-  //   final db = await database;
-  //   return await db.update(
-  //     'users',
-  //     user,
-  //     where: 'id = ?',
-  //     whereArgs: [id],
-  //   );
-  // }
-
-  // Future<int> deleteUserById(int id) async {
-  //   final db = await database;
-  //   return await db.delete(
-  //     'users',
-  //     where: 'id = ?',
-  //     whereArgs: [id],
-  //   );
-  // }
-
-  // Future<int> deleteAllUsersFromDatabase() async {
-  //   final db = await database;
-  //   return await db.delete('users');
-  // }
 }
